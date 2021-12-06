@@ -3,6 +3,8 @@ package com.udacity.vehicles.service;
 import com.udacity.vehicles.domain.car.Car;
 import com.udacity.vehicles.domain.car.CarRepository;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -42,7 +44,22 @@ public class CarService {
          *   If it does not exist, throw a CarNotFoundException
          *   Remove the below code as part of your implementation.
          */
-        Car car = new Car();
+
+        // Retrieve all cars
+        List<Car> allCars = this.list();
+
+        // Set up a null car to hold the found car. If still null, use to throw exception
+        Car car = null;
+
+        // Search for the car by the given ID
+        for(int i = 0; i < allCars.size(); i++){
+            if (allCars.get(i).getId() == id) {
+                car = allCars.get(i);
+            }
+        }
+        // Set up an optional car to hold the car found or not found above. If car not found and null, throw exception
+        Optional<Car> optionalCar = Optional.ofNullable(car);
+        Car returnCar = optionalCar.orElseThrow(CarNotFoundException::new);
 
         /**
          * TODO: Use the Pricing Web client you create in `VehiclesApiApplication`
