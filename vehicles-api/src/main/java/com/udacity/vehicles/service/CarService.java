@@ -119,10 +119,28 @@ public class CarService {
          *   If it does not exist, throw a CarNotFoundException
          */
 
+        // Retrieve all cars
+        List<Car> allCars = this.list();
+
+        // Set up a null car to hold the found car. If still null, use to throw exception
+        Car car = null;
+
+        // Search for the car by the given ID
+        for(int i = 0; i < allCars.size(); i++){
+            if (allCars.get(i).getId() == id) {
+                car = allCars.get(i);
+            }
+        }
+        // Set up an optional car to hold the car found or not found above. If car not found and null, throw exception
+        Optional<Car> optionalCar = Optional.ofNullable(car);
+        Car foundCar = optionalCar.orElseThrow(CarNotFoundException::new);
+
 
         /**
          * TODO: Delete the car from the repository.
          */
+        // Delete the car from the repository
+        repository.delete(foundCar);
 
 
     }
