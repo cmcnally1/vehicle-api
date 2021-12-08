@@ -4,6 +4,8 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -33,6 +35,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 /**
  * Implements testing of the CarController class.
@@ -91,11 +94,20 @@ public class CarControllerTest {
      */
     @Test
     public void listCars() throws Exception {
-        /**
-         * TODO: Add a test to check that the `get` method works by calling
-         *   the whole list of vehicles. This should utilize the car from `getCar()`
-         *   below (the vehicle will be the first in the list).
-         */
+        // Create a car for test
+        Car car = getCar();
+
+        // Perform a GET request to retrieve all cars
+        mvc.perform(get("/cars/"))
+                .andExpect(status().isOk()) // Verify status is ok
+                .andExpect(content().json("{}")) // Verify Json is returned
+                .andExpect(MockMvcResultMatchers
+                        .jsonPath("$._embedded.carList").isNotEmpty()) // Verify that the list of cars returned is not empty
+                .andExpect(MockMvcResultMatchers
+                        .jsonPath("$._embedded.carList[0].details.model").value(car.getDetails().getModel())); // Verify that the model matches the local car
+
+        // Verify that the list method in the car service was called once
+        verify(carService, times(1)).list();
 
     }
 

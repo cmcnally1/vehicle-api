@@ -114,11 +114,6 @@ public class CarService {
      * @param id the ID number of the car to delete
      */
     public void delete(Long id) {
-        /**
-         * TODO: Find the car by ID from the `repository` if it exists.
-         *   If it does not exist, throw a CarNotFoundException
-         */
-
         // Retrieve all cars
         List<Car> allCars = this.list();
 
@@ -135,13 +130,8 @@ public class CarService {
         Optional<Car> optionalCar = Optional.ofNullable(car);
         Car foundCar = optionalCar.orElseThrow(CarNotFoundException::new);
 
-
-        /**
-         * TODO: Delete the car from the repository.
-         */
         // Delete the car from the repository
         repository.delete(foundCar);
-
 
     }
 }
