@@ -129,11 +129,25 @@ public class CarControllerTest {
      */
     @Test
     public void deleteCar() throws Exception {
-        /**
-         * TODO: Add a test to check whether a vehicle is appropriately deleted
-         *   when the `delete` method is called from the Car Controller. This
-         *   should utilize the car from `getCar()` below.
-         */
+        // Create a car for test
+        Car car = getCar();
+
+        // Perform a GET request to first check that the car exists before delete
+        mvc.perform(get("/cars/"))
+                .andExpect(status().isOk()) // Verify status is ok
+                .andExpect(content().json("{}")) // Verify Json is returned
+                .andExpect(MockMvcResultMatchers
+                        .jsonPath("$._embedded.carList").isNotEmpty()) // Verify that the list of cars returned is not empty
+                .andExpect(MockMvcResultMatchers
+                        .jsonPath("$._embedded.carList[0].details.model").value(car.getDetails().getModel())); // Verify that the model matches the local car
+
+
+        // Perform the delete request
+        mvc.perform(delete("/cars/1/"))
+                .andExpect(status().is2xxSuccessful()); // Verify status is a 2xx, indicating delete was successful
+
+        // Verify that the delete method in the car service was called once for car with id 1
+        verify(carService, times(1)).delete(1L);
     }
 
     /**
