@@ -3,6 +3,7 @@ package com.udacity.vehicles.service;
 import com.udacity.vehicles.VehiclesApiApplication;
 import com.udacity.vehicles.client.maps.MapsClient;
 import com.udacity.vehicles.client.prices.PriceClient;
+import com.udacity.vehicles.domain.Location;
 import com.udacity.vehicles.domain.car.Car;
 import com.udacity.vehicles.domain.car.CarRepository;
 import java.util.List;
@@ -67,7 +68,7 @@ public class CarService {
         }
         // Set up an optional car to hold the car found or not found above. If car not found and null, throw exception
         Optional<Car> optionalCar = Optional.ofNullable(car);
-        Car returnCar = optionalCar.orElseThrow(CarNotFoundException::new);
+        Car foundCar = optionalCar.orElseThrow(CarNotFoundException::new);
 
         /**
          * TODO: Use the Pricing Web client you create in `VehiclesApiApplication`
@@ -76,19 +77,17 @@ public class CarService {
          * Note: The car class file uses @transient, meaning you will need to call
          *   the pricing service each time to get the price.
          */
+        // Get the price of the car
+        String price = priceClient.getPrice(foundCar.getId());
+        // Set the price of the car
+        foundCar.setPrice(price);
 
+        // Get the location of the car
+        Location location = mapsClient.getAddress(foundCar.getLocation());
+        // Set the location of the car to the new location with address
+        foundCar.setLocation(location);
 
-        /**
-         * TODO: Use the Maps Web client you create in `VehiclesApiApplication`
-         *   to get the address for the vehicle. You should access the location
-         *   from the car object and feed it to the Maps service.
-         * TODO: Set the location of the vehicle, including the address information
-         * Note: The Location class file also uses @transient for the address,
-         * meaning the Maps service needs to be called each time for the address.
-         */
-
-
-        return car;
+        return foundCar;
     }
 
     /**

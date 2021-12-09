@@ -117,10 +117,6 @@ public class CarControllerTest {
      */
     @Test
     public void findCar() throws Exception {
-        /**
-         * TODO: Add a test to check that the `get` method works by calling
-         *   a vehicle by ID. This should utilize the car from `getCar()` below.
-         */
 
         // Create a car for test
         Car car = getCar();
@@ -130,9 +126,7 @@ public class CarControllerTest {
                 .andExpect(status().isOk()) // Verify status is ok
                 .andExpect(content().json("{}")) // Verify Json is returned
                 .andExpect(MockMvcResultMatchers
-                        .jsonPath("$._embedded.carList").isNotEmpty()) // Verify that the list of cars returned is not empty
-                .andExpect(MockMvcResultMatchers
-                        .jsonPath("$._embedded.carList[0].details.model").value(car.getDetails().getModel())); // Verify that the model matches the local car
+                        .jsonPath("$.details.model").value(car.getDetails().getModel())); // Verify that the model matches the local car
 
         // Verify that the list method in the car service was called once
         verify(carService, times(1)).findById(1L);
