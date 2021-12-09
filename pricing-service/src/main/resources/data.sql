@@ -17,4 +17,4 @@ INSERT INTO price (id, currency, price, vehicleId) VALUES (16, 'EUR', 60000.00, 
 INSERT INTO price (id, currency, price, vehicleId) VALUES (17, 'EUR', 145000.00, 17);
 INSERT INTO price (id, currency, price, vehicleId) VALUES (18, 'EUR', 104000.00, 18);
 INSERT INTO price (id, currency, price, vehicleId) VALUES (19, 'EUR', 13000.00, 19);
-INSERT INTO price (id, currency, price, vehicleId) VALUES (20, 'EUR', 5000.00, 20s);
+INSERT INTO price (id, currency, price, vehicleId) VALUES (20, 'EUR', 5000.00, 20);
