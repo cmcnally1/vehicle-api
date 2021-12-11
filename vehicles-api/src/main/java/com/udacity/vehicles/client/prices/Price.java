@@ -9,7 +9,7 @@ public class Price {
 
     private String currency;
     private BigDecimal price;
-    private Long vehicleId;
+    private Long vehicleid;
 
     public Price() {
     }
@@ -30,11 +30,11 @@ public class Price {
         this.price = price;
     }
 
-    public Long getVehicleId() {
-        return vehicleId;
+    public Long getVehicleid() {
+        return vehicleid;
     }
 
-    public void setVehicleId(Long vehicleId) {
-        this.vehicleId = vehicleId;
+    public void setVehicleid(Long vehicleid) {
+        this.vehicleid = vehicleid;
     }
 }
