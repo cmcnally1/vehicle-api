@@ -6,9 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -130,6 +128,40 @@ public class CarControllerTest {
 
         // Verify that the list method in the car service was called once
         verify(carService, times(1)).findById(1L);
+    }
+
+    /**
+     * Tests the update of a single car by ID.
+     * @throws Exception if the update operation of a vehicle fails
+     */
+    @Test
+    public void updateCar() throws Exception {
+
+        // Create a car for the test
+        Car car = getCar();
+
+        // Create a new car to be used for updating
+        Car updateCar = car;
+        // Update some of the values of the update car
+        updateCar.setCondition(Condition.NEW);
+        updateCar.setLocation(new Location(53.349804, -6.260310));
+
+        // Perform a GET request to first check that the car exists before delete
+        mvc.perform(get("/cars/"))
+                .andExpect(status().isOk()) // Verify status is ok
+                .andExpect(content().json("{}")) // Verify Json is returned
+                .andExpect(MockMvcResultMatchers
+                        .jsonPath("$._embedded.carList").isNotEmpty()) // Verify that the list of cars returned is not empty
+                .andExpect(MockMvcResultMatchers
+                        .jsonPath("$._embedded.carList[0].details.model").value(car.getDetails().getModel())); // Verify that the model matches the local car
+
+        // Perform a PUT request to update the car
+        mvc.perform(put("/cars/1")
+                .content(json.write(updateCar).getJson())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(status().isOk());
+
     }
 
     /**
