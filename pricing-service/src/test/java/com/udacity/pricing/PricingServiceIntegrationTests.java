@@ -31,8 +31,20 @@ public class PricingServiceIntegrationTests {
     // Test that the Pricing Service will return the correct response when all prices are requested
     @Test
     public void getAllPrices() {
+        // Get all prices
         ResponseEntity<String> responseEntity = this.restTemplate.getForEntity("http://localhost:" + port + "/prices/", String.class);
 
+        // Verify that the OK response is received
+        assertThat(responseEntity.getStatusCode(), equalTo(HttpStatus.OK));
+    }
+
+    // Test that the Pricing Service will return the correct response when a price by id is requested
+    @Test
+    public void getPriceById() {
+        // Get price 5
+        ResponseEntity<String> responseEntity = this.restTemplate.getForEntity("http://localhost:" + port + "/prices/5", String.class);
+
+        // Verify that the OK response is received
         assertThat(responseEntity.getStatusCode(), equalTo(HttpStatus.OK));
     }
 }
